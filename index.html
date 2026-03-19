@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mbake Kekia | Data Analyst Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root {
+      --navy:       #0a1628;
+      --navy-mid:   #112240;
+      --navy-light: #1d3461;
+      --gold:       #c9a84c;
+      --gold-light: #e8c97a;
+      --white:      #f5f5f0;
+      --grey:       #8a94a6;
+      --grey-light: #e8eaf0;
+      --text:       #2c3347;
+      --accent:     #1a6b8a;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      background: var(--white);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: var(--navy);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 64px;
+      border-bottom: 2px solid var(--gold);
+    }
+    .nav-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px; font-weight: 700;
+      color: var(--white); letter-spacing: 0.5px;
+    }
+    .nav-brand span { color: var(--gold); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      color: var(--grey-light); text-decoration: none;
+      font-size: 13px; font-weight: 500; letter-spacing: 1.5px;
+      text-transform: uppercase; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--navy);
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 100px 80px 80px;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: 0; right: 0;
+      width: 45%; height: 100%;
+      background: linear-gradient(135deg, var(--navy-light) 0%, var(--accent) 100%);
+      clip-path: polygon(15% 0%, 100% 0%, 100% 100%, 0% 100%);
+      opacity: 0.35;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; bottom: -2px; left: 0; right: 0; height: 60px;
+      background: var(--white);
+      clip-path: polygon(0 100%, 100% 0%, 100% 100%);
+    }
+    .hero-content { max-width: 680px; position: relative; z-index: 2; }
+    .hero-tag {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--navy);
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 3px; text-transform: uppercase;
+      padding: 6px 16px; border-radius: 2px;
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(42px, 6vw, 72px);
+      font-weight: 900; color: var(--white);
+      line-height: 1.1; margin-bottom: 8px;
+    }
+    .hero h1 span { color: var(--gold); }
+    .hero-subtitle {
+      font-size: 18px; color: var(--grey);
+      margin-bottom: 24px; font-weight: 300;
+      letter-spacing: 0.5px;
+    }
+    .hero-desc {
+      font-size: 15px; color: #a8b4cc;
+      max-width: 520px; margin-bottom: 40px; line-height: 1.8;
+    }
+    .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--gold); color: var(--navy);
+      padding: 14px 32px; border-radius: 3px;
+      font-weight: 700; font-size: 13px;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      text-decoration: none; transition: all 0.2s;
+      border: 2px solid var(--gold);
+    }
+    .btn-primary:hover { background: var(--gold-light); border-color: var(--gold-light); }
+    .btn-outline {
+      background: transparent; color: var(--white);
+      padding: 14px 32px; border-radius: 3px;
+      font-weight: 600; font-size: 13px;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      text-decoration: none; transition: all 0.2s;
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+    .hero-stats {
+      display: flex; gap: 40px; margin-top: 56px;
+      padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .stat-item { text-align: left; }
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px; font-weight: 700; color: var(--gold);
+      display: block;
+    }
+    .stat-label { font-size: 12px; color: var(--grey); letter-spacing: 1px; text-transform: uppercase; }
+
+    /* ── SECTIONS ── */
+    section { padding: 96px 80px; }
+    .section-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 8px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 700; color: var(--navy);
+      margin-bottom: 16px; line-height: 1.2;
+    }
+    .section-divider {
+      width: 56px; height: 3px;
+      background: var(--gold); margin-bottom: 48px;
+    }
+    .section-intro {
+      font-size: 16px; color: #5a6380;
+      max-width: 620px; margin-bottom: 56px; line-height: 1.8;
+    }
+
+    /* ── ABOUT ── */
+    #about { background: var(--white); }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 64px; align-items: start;
+    }
+    .about-text p {
+      font-size: 15px; color: #4a5568;
+      margin-bottom: 20px; line-height: 1.9;
+    }
+    .about-highlight {
+      background: var(--navy);
+      padding: 28px 32px; border-radius: 4px;
+      border-left: 4px solid var(--gold);
+      margin-top: 32px;
+    }
+    .about-highlight p {
+      color: #a8b4cc; font-size: 14px;
+      font-style: italic; line-height: 1.8; margin: 0;
+    }
+    .about-highlight strong { color: var(--gold); }
+    .about-cards { display: flex; flex-direction: column; gap: 16px; }
+    .about-card {
+      background: var(--grey-light);
+      border-radius: 4px; padding: 24px 28px;
+      border-left: 3px solid var(--navy-light);
+      transition: border-color 0.2s;
+    }
+    .about-card:hover { border-color: var(--gold); }
+    .about-card-title {
+      font-weight: 700; color: var(--navy);
+      font-size: 14px; letter-spacing: 0.5px;
+      margin-bottom: 6px; text-transform: uppercase;
+    }
+    .about-card p { font-size: 14px; color: #5a6380; margin: 0; }
+
+    /* ── SKILLS ── */
+    #skills { background: var(--navy); }
+    #skills .section-title { color: var(--white); }
+    #skills .section-intro { color: var(--grey); }
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .skill-card {
+      background: var(--navy-mid);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 4px; padding: 28px 32px;
+      transition: all 0.2s;
+    }
+    .skill-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-3px);
+    }
+    .skill-icon { font-size: 28px; margin-bottom: 14px; display: block; }
+    .skill-card h3 {
+      font-family: 'Playfair Display', serif;
+      color: var(--white); font-size: 18px;
+      margin-bottom: 16px;
+    }
+    .skill-list { list-style: none; }
+    .skill-list li {
+      color: var(--grey); font-size: 13px;
+      padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .skill-list li::before {
+      content: '▸'; color: var(--gold); font-size: 10px;
+    }
+    .skill-list li:last-child { border-bottom: none; }
+
+    /* ── PROJECT ── */
+    #project { background: var(--grey-light); }
+    .project-card {
+      background: var(--white);
+      border-radius: 6px; overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+    .project-header {
+      background: var(--navy);
+      padding: 32px 40px;
+      display: flex; align-items: center;
+      justify-content: space-between; flex-wrap: wrap; gap: 16px;
+    }
+    .project-header-left h2 {
+      font-family: 'Playfair Display', serif;
+      color: var(--white); font-size: 24px; margin-bottom: 6px;
+    }
+    .project-header-left p { color: var(--grey); font-size: 14px; }
+    .project-badge {
+      background: var(--gold); color: var(--navy);
+      padding: 6px 16px; border-radius: 2px;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+    }
+    .project-body { padding: 40px; }
+
+    /* Cleaning Steps */
+    .cleaning-steps { margin-bottom: 48px; }
+    .cleaning-steps h3 {
+      font-family: 'Playfair Display', serif;
+      color: var(--navy); font-size: 20px;
+      margin-bottom: 24px; padding-bottom: 12px;
+      border-bottom: 2px solid var(--grey-light);
+    }
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .step-item {
+      display: flex; gap: 16px; align-items: flex-start;
+      padding: 18px; background: var(--grey-light);
+      border-radius: 4px; border-left: 3px solid var(--navy-light);
+    }
+    .step-num {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--navy); color: var(--gold);
+      font-weight: 700; font-size: 13px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .step-content h4 {
+      font-size: 13px; font-weight: 700;
+      color: var(--navy); margin-bottom: 4px;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .step-content p { font-size: 12px; color: #5a6380; line-height: 1.5; }
+    .step-formula {
+      font-family: 'Courier New', monospace;
+      font-size: 11px; color: var(--accent);
+      background: #e8f4f8; padding: 3px 8px;
+      border-radius: 3px; margin-top: 6px; display: inline-block;
+    }
+
+    /* Charts */
+    .charts-section h3 {
+      font-family: 'Playfair Display', serif;
+      color: var(--navy); font-size: 20px;
+      margin-bottom: 8px;
+    }
+    .charts-section > p {
+      color: #5a6380; font-size: 14px; margin-bottom: 32px;
+    }
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px; margin-bottom: 32px;
+    }
+    .chart-box {
+      background: var(--grey-light);
+      border-radius: 4px; padding: 28px;
+      border: 1px solid #dde0e8;
+    }
+    .chart-box h4 {
+      font-size: 14px; font-weight: 700;
+      color: var(--navy); margin-bottom: 4px;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .chart-box .chart-insight {
+      font-size: 12px; color: var(--grey);
+      margin-bottom: 20px; font-style: italic;
+    }
+    .chart-box canvas { max-height: 260px; }
+
+    /* Insights */
+    .insights-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px; margin-top: 32px;
+    }
+    .insight-card {
+      background: var(--navy);
+      border-radius: 4px; padding: 24px;
+      border-top: 3px solid var(--gold);
+    }
+    .insight-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px; font-weight: 700;
+      color: var(--gold); display: block; margin-bottom: 4px;
+    }
+    .insight-label {
+      font-size: 12px; color: var(--grey);
+      text-transform: uppercase; letter-spacing: 1px;
+      margin-bottom: 8px; display: block;
+    }
+    .insight-desc { font-size: 13px; color: #a8b4cc; line-height: 1.5; }
+
+    /* Formulas learned */
+    .formulas-section {
+      margin-top: 48px; padding-top: 40px;
+      border-top: 2px solid var(--grey-light);
+    }
+    .formulas-section h3 {
+      font-family: 'Playfair Display', serif;
+      color: var(--navy); font-size: 20px; margin-bottom: 24px;
+    }
+    .formula-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .formula-pill {
+      background: var(--navy);
+      border-radius: 4px; padding: 14px 18px;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .formula-name {
+      font-family: 'Courier New', monospace;
+      color: var(--gold); font-size: 13px; font-weight: 700;
+    }
+    .formula-desc { font-size: 11px; color: var(--grey); }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--navy); }
+    #contact .section-title { color: var(--white); }
+    #contact .section-intro { color: var(--grey); }
+    .contact-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 64px; align-items: start;
+    }
+    .contact-info { display: flex; flex-direction: column; gap: 20px; }
+    .contact-item {
+      display: flex; align-items: center; gap: 16px;
+      padding: 20px 24px;
+      background: var(--navy-mid);
+      border-radius: 4px;
+      border-left: 3px solid var(--gold);
+    }
+    .contact-icon { font-size: 22px; }
+    .contact-item-label {
+      font-size: 11px; color: var(--grey);
+      text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 4px;
+    }
+    .contact-item-value {
+      color: var(--white); font-size: 14px; font-weight: 500;
+    }
+    .contact-item-value a {
+      color: var(--gold); text-decoration: none;
+    }
+    .contact-item-value a:hover { text-decoration: underline; }
+    .contact-message {
+      background: var(--navy-mid);
+      border-radius: 4px; padding: 32px;
+      border: 1px solid rgba(201,168,76,0.2);
+    }
+    .contact-message h3 {
+      font-family: 'Playfair Display', serif;
+      color: var(--white); font-size: 22px; margin-bottom: 16px;
+    }
+    .contact-message p {
+      color: var(--grey); font-size: 14px;
+      line-height: 1.8; margin-bottom: 24px;
+    }
+    .availability {
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(6, 214, 160, 0.1);
+      border: 1px solid rgba(6,214,160,0.3);
+      border-radius: 3px; padding: 12px 18px;
+    }
+    .avail-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: #06D6A0; animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .avail-text { font-size: 13px; color: #06D6A0; font-weight: 600; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #060e1e;
+      padding: 28px 80px;
+      display: flex; align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(201,168,76,0.2);
+    }
+    .footer-brand {
+      font-family: 'Playfair Display', serif;
+      color: var(--white); font-size: 16px;
+    }
+    .footer-brand span { color: var(--gold); }
+    .footer-copy { font-size: 12px; color: var(--grey); }
+
+    /* ── ANIMATIONS ── */
+    .fade-in {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 0 24px; }
+      .nav-links { gap: 20px; }
+      section { padding: 72px 32px; }
+      .hero { padding: 100px 32px 80px; }
+      .about-grid, .contact-grid, .charts-grid { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 12px; text-align: center; padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-brand">M<span>.</span>Kekia</div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#project">Project</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <span class="hero-tag">Data Analyst Portfolio</span>
+      <h1>Mbake<br/><span>Kekia</span></h1>
+      <p class="hero-subtitle">Turning Messy Data Into Clear Decisions</p>
+      <p class="hero-desc">
+        A data analyst in training with hands-on experience cleaning, analysing, 
+        and visualising real-world HR datasets. Proficient in Excel data cleaning, 
+        PivotTables, and chart-driven storytelling.
+      </p>
+      <div class="hero-btns">
+        <a href="#project" class="btn-primary">View My Project</a>
+        <a href="#contact" class="btn-outline">Get In Touch</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-number">100</span>
+          <span class="stat-label">Rows Cleaned</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <span class="stat-label">Cleaning Steps</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">8+</span>
+          <span class="stat-label">Excel Formulas</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">2</span>
+          <span class="stat-label">Charts Built</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-label">About Me</div>
+    <h2 class="section-title">Who I Am</h2>
+    <div class="section-divider"></div>
+    <div class="about-grid">
+      <div class="about-text fade-in">
+        <p>
+          My name is Mbake Kekia and I am a student at the University of Kentucky 
+          with a growing passion for data analytics. I believe that behind every 
+          spreadsheet is a story waiting to be told — and I am learning to tell those stories.
+        </p>
+        <p>
+          I started this journey with zero experience in data cleaning or analysis. 
+          Through hands-on practice with real-world messy datasets, I have developed 
+          practical skills in Excel that companies actively look for in entry-level 
+          data analyst roles.
+        </p>
+        <p>
+          My goal is to leverage data to help organisations make smarter, faster, 
+          and more confident decisions — starting with the fundamentals and building 
+          from there.
+        </p>
+        <div class="about-highlight">
+          <p>
+            <strong>"Every expert was once a beginner."</strong> I started this project 
+            not knowing what a formula was. I now write them independently, 
+            identify data quality issues on sight, and extract business insights 
+            from raw data. That progress is what this portfolio documents.
+          </p>
+        </div>
+      </div>
+      <div class="about-cards fade-in">
+        <div class="about-card">
+          <div class="about-card-title">🎓 Education</div>
+          <p>University of Kentucky<br/>Currently pursuing studies with a focus on data and analytics</p>
+        </div>
+        <div class="about-card">
+          <div class="about-card-title">📍 Location</div>
+          <p>Lexington, Kentucky, USA</p>
+        </div>
+        <div class="about-card">
+          <div class="about-card-title">🎯 Focus Area</div>
+          <p>Data Cleaning · Excel Analytics · HR Data · Business Intelligence</p>
+        </div>
+        <div class="about-card">
+          <div class="about-card-title">🚀 Currently Learning</div>
+          <p>Advanced Excel · PivotTables · Data Visualisation · Python (coming soon)</p>
+        </div>
+        <div class="about-card">
+          <div class="about-card-title">💼 Open To</div>
+          <p>Entry-level Data Analyst roles · Internships · Freelance projects</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="section-label">Technical Skills</div>
+    <h2 class="section-title" style="color:var(--white)">What I Know How To Do</h2>
+    <div class="section-divider"></div>
+    <p class="section-intro">
+      Every skill below was applied hands-on to a real dataset — not just read about. 
+      These are the tools and techniques companies list in entry-level data analyst job postings.
+    </p>
+    <div class="skills-grid">
+      <div class="skill-card fade-in">
+        <span class="skill-icon">🧹</span>
+        <h3>Data Cleaning</h3>
+        <ul class="skill-list">
+          <li>Identifying & removing duplicate rows</li>
+          <li>Standardising inconsistent text casing</li>
+          <li>Removing currency symbols from numeric fields</li>
+          <li>Fixing invalid values (negatives, outliers)</li>
+          <li>Parsing & standardising mixed date formats</li>
+          <li>Validating data ranges with logical rules</li>
+          <li>Documenting changes in an audit log</li>
+        </ul>
+      </div>
+      <div class="skill-card fade-in">
+        <span class="skill-icon">📊</span>
+        <h3>Excel Analytics</h3>
+        <ul class="skill-list">
+          <li>PivotTables for data aggregation</li>
+          <li>PivotCharts for visualisation</li>
+          <li>Conditional Formatting for diagnostics</li>
+          <li>Data Validation for quality control</li>
+          <li>Find & Replace with precision targeting</li>
+          <li>Paste Special (Values) — formula to text</li>
+          <li>Freeze Panes · Excel Tables (Ctrl+T)</li>
+        </ul>
+      </div>
+      <div class="skill-card fade-in">
+        <span class="skill-icon">🔢</span>
+        <h3>Excel Formulas</h3>
+        <ul class="skill-list">
+          <li>PROPER · TRIM · UPPER · LOWER</li>
+          <li>SUBSTITUTE — remove symbols</li>
+          <li>VALUE — convert text to numbers</li>
+          <li>IF · OR — conditional logic</li>
+          <li>IFS — multi-condition standardisation</li>
+          <li>DATEVALUE — fix date formats</li>
+          <li>IFERROR · COUNTIF · SUMIF</li>
+        </ul>
+      </div>
+      <div class="skill-card fade-in">
+        <span class="skill-icon">🧠</span>
+        <h3>Analytical Thinking</h3>
+        <ul class="skill-list">
+          <li>Profiling datasets before cleaning</li>
+          <li>Identifying root cause of data issues</li>
+          <li>Asking the right business questions</li>
+          <li>Translating numbers into plain insights</li>
+          <li>Documenting process & methodology</li>
+          <li>Presenting findings clearly</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECT -->
+  <section id="project">
+    <div class="section-label">Featured Project</div>
+    <h2 class="section-title">HR Employee Attrition Analysis</h2>
+    <div class="section-divider"></div>
+    <p class="section-intro">
+      Starting with a deliberately messy 106-row HR dataset containing 10 distinct data quality issues, 
+      I cleaned, validated, and analysed the data to uncover why employees were leaving the company.
+    </p>
+
+    <div class="project-card fade-in">
+      <div class="project-header">
+        <div class="project-header-left">
+          <h2>HR Employee Dataset — End-to-End Clean</h2>
+          <p>Tool: Microsoft Excel &nbsp;·&nbsp; Dataset: 106 rows, 11 columns &nbsp;·&nbsp; Issues found: 10 distinct problems</p>
+        </div>
+        <span class="project-badge">Completed</span>
+      </div>
+
+      <div class="project-body">
+
+        <!-- CLEANING STEPS -->
+        <div class="cleaning-steps">
+          <h3>📋 The 12 Cleaning Steps I Performed</h3>
+          <div class="steps-grid">
+            <div class="step-item">
+              <div class="step-num">01</div>
+              <div class="step-content">
+                <h4>Protected Raw Data</h4>
+                <p>Duplicated the sheet and renamed original to RAW_DATA before touching anything.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">02</div>
+              <div class="step-content">
+                <h4>Removed Duplicates</h4>
+                <p>Found 12 red highlighted cells (6 duplicate rows). Used Data → Remove Duplicates. Left with 100 unique rows.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">03</div>
+              <div class="step-content">
+                <h4>Standardised Department</h4>
+                <p>Fixed 'engineering', 'SALES', 'Hr' → clean values using formula then Find & Replace.</p>
+                <span class="step-formula">=PROPER(TRIM(D2))</span>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">04</div>
+              <div class="step-content">
+                <h4>Cleaned Annual Salary</h4>
+                <p>Removed $ signs and commas from salary column, converted text to real numbers.</p>
+                <span class="step-formula">=VALUE(SUBSTITUTE(SUBSTITUTE(G2,",",""),"$",""))</span>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">05</div>
+              <div class="step-content">
+                <h4>Removed Negative Salaries</h4>
+                <p>Blanked out impossible negative salary values — can't pay someone minus money.</p>
+                <span class="step-formula">=IF(G2&lt;0,"",G2)</span>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">06</div>
+              <div class="step-content">
+                <h4>Fixed Invalid Ages</h4>
+                <p>Removed ages below 18 and above 70 (impossible for an employee). Found -3 and 999 values.</p>
+                <span class="step-formula">=IF(OR(C2&lt;18,C2&gt;70),"",C2)</span>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">07</div>
+              <div class="step-content">
+                <h4>Fixed Years Experience</h4>
+                <p>Removed negative experience values — you can't have -2 years of experience.</p>
+                <span class="step-formula">=IF(OR(H2&lt;0,H2&gt;50),"",H2)</span>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">08</div>
+              <div class="step-content">
+                <h4>Standardised Education & Job Level</h4>
+                <p>Fixed 'bachelor', 'PHD', 'SENIOR', 'junior' → consistent casing across both columns.</p>
+                <span class="step-formula">=PROPER(TRIM(E2))</span>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">09</div>
+              <div class="step-content">
+                <h4>Standardised Attrition Column</h4>
+                <p>Mapped YES/yes/1 → "Yes" and NO/no/0 → "No" using multi-condition IFS formula.</p>
+                <span class="step-formula">=IFS(OR(K2="yes",K2="1"),"Yes",OR(K2="no",K2="0"),"No",TRUE,K2)</span>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">10</div>
+              <div class="step-content">
+                <h4>Fixed Performance Rating</h4>
+                <p>Scale is 1–5. Blanked out values of 0 and 6 which were clearly data entry errors.</p>
+                <span class="step-formula">=IF(OR(I2&lt;1,I2&gt;5),"",I2)</span>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">11</div>
+              <div class="step-content">
+                <h4>Fixed Job Satisfaction</h4>
+                <p>Same 1–5 scale. Removed invalid value of 6 found in multiple rows.</p>
+                <span class="step-formula">=IF(OR(J2&lt;1,J2&gt;5),"",J2)</span>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">12</div>
+              <div class="step-content">
+                <h4>Standardised Hire Dates</h4>
+                <p>4 different date formats (YYYY-MM-DD, MM/DD/YYYY, DD-Mon-YYYY, YYYY/MM/DD) all converted to uniform format.</p>
+                <span class="step-formula">=IFERROR(DATEVALUE(B2),IFERROR(DATEVALUE(SUBSTITUTE(B2,"/","-")),B2))</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CHARTS -->
+        <div class="charts-section">
+          <h3>📊 Analysis & Insights</h3>
+          <p>After cleaning, I built PivotTables to answer two key business questions about employee attrition.</p>
+
+          <div class="charts-grid">
+            <div class="chart-box">
+              <h4>Attrition by Department</h4>
+              <p class="chart-insight">Which department is losing the most employees?</p>
+              <canvas id="attritionChart"></canvas>
+            </div>
+            <div class="chart-box">
+              <h4>Average Salary by Department</h4>
+              <p class="chart-insight">Are lower-paid departments leaving more often?</p>
+              <canvas id="salaryChart"></canvas>
+            </div>
+          </div>
+
+          <!-- KEY INSIGHTS -->
+          <div class="insights-grid">
+            <div class="insight-card">
+              <span class="insight-number">68%</span>
+              <span class="insight-label">Engineering Attrition</span>
+              <p class="insight-desc">Engineering has the highest loss rate — 15 of 22 employees left despite having the highest average salary.</p>
+            </div>
+            <div class="insight-card">
+              <span class="insight-number">$112K</span>
+              <span class="insight-label">Avg Engineering Salary</span>
+              <p class="insight-desc">Highest paid department yet highest attrition — salary alone is not keeping employees. A deeper investigation is needed.</p>
+            </div>
+            <div class="insight-card">
+              <span class="insight-number">29%</span>
+              <span class="insight-label">Marketing Attrition</span>
+              <p class="insight-desc">Marketing has the lowest attrition at just 7 of 24 employees leaving. What are they doing differently?</p>
+            </div>
+            <div class="insight-card">
+              <span class="insight-number">48%</span>
+              <span class="insight-label">Overall Attrition Rate</span>
+              <p class="insight-desc">Nearly half of all employees left the company — a company-wide retention problem that needs urgent attention.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- FORMULAS LEARNED -->
+        <div class="formulas-section">
+          <h3>🔢 Excel Formulas I Learned & Used</h3>
+          <div class="formula-grid">
+            <div class="formula-pill">
+              <span class="formula-name">PROPER(TRIM())</span>
+              <span class="formula-desc">Fix text casing + remove extra spaces</span>
+            </div>
+            <div class="formula-pill">
+              <span class="formula-name">SUBSTITUTE()</span>
+              <span class="formula-desc">Remove $ signs, commas, symbols</span>
+            </div>
+            <div class="formula-pill">
+              <span class="formula-name">VALUE()</span>
+              <span class="formula-desc">Convert text numbers to real numbers</span>
+            </div>
+            <div class="formula-pill">
+              <span class="formula-name">IF(OR())</span>
+              <span class="formula-desc">Blank out invalid values with logic</span>
+            </div>
+            <div class="formula-pill">
+              <span class="formula-name">IFS()</span>
+              <span class="formula-desc">Standardise multiple value variations</span>
+            </div>
+            <div class="formula-pill">
+              <span class="formula-name">DATEVALUE()</span>
+              <span class="formula-desc">Convert text dates to real dates</span>
+            </div>
+            <div class="formula-pill">
+              <span class="formula-name">IFERROR()</span>
+              <span class="formula-desc">Handle errors gracefully in formulas</span>
+            </div>
+            <div class="formula-pill">
+              <span class="formula-name">COUNTIF()</span>
+              <span class="formula-desc">Count rows matching a condition</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-label">Get In Touch</div>
+    <h2 class="section-title" style="color:var(--white)">Let's Connect</h2>
+    <div class="section-divider"></div>
+    <p class="section-intro">
+      I am actively looking for entry-level data analyst opportunities, internships, 
+      and collaborative projects. Feel free to reach out through either email below.
+    </p>
+    <div class="contact-grid">
+      <div class="contact-info fade-in">
+        <div class="contact-item">
+          <span class="contact-icon">👤</span>
+          <div>
+            <div class="contact-item-label">Full Name</div>
+            <div class="contact-item-value">Mbake Kekia</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <span class="contact-icon">🎓</span>
+          <div>
+            <div class="contact-item-label">University Email</div>
+            <div class="contact-item-value">
+              <a href="mailto:mke287@uky.edu">mke287@uky.edu</a>
+            </div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <span class="contact-icon">📧</span>
+          <div>
+            <div class="contact-item-label">Personal Email</div>
+            <div class="contact-item-value">
+              <a href="mailto:mbakekekia1@gmail.com">mbakekekia1@gmail.com</a>
+            </div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <span class="contact-icon">📍</span>
+          <div>
+            <div class="contact-item-label">Location</div>
+            <div class="contact-item-value">Lexington, Kentucky, USA</div>
+          </div>
+        </div>
+      </div>
+      <div class="contact-message fade-in">
+        <h3>Open To Opportunities</h3>
+        <p>
+          Whether you are a recruiter, a fellow student, or someone who wants to 
+          collaborate on a data project — I would love to hear from you. 
+          I respond to all emails within 24 hours.
+        </p>
+        <p>
+          I am particularly interested in roles involving data cleaning, 
+          reporting, and business intelligence — anywhere I can keep growing 
+          my skills and add real value to a team.
+        </p>
+        <div class="availability">
+          <div class="avail-dot"></div>
+          <span class="avail-text">Available for internships & entry-level roles</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-brand">M<span>.</span>Kekia — Data Analyst Portfolio</div>
+    <div class="footer-copy">© 2025 Mbake Kekia · Built from scratch · University of Kentucky</div>
+  </footer>
+
+  <script>
+    // ── SCROLL ANIMATIONS ──
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // ── CHART 1: Attrition by Department ──
+    const ctx1 = document.getElementById('attritionChart').getContext('2d');
+    new Chart(ctx1, {
+      type: 'bar',
+      data: {
+        labels: ['Engineering', 'HR', 'Marketing', 'Sales'],
+        datasets: [
+          {
+            label: 'Still Employed (No)',
+            data: [7, 12, 17, 16],
+            backgroundColor: '#1d3461',
+            borderRadius: 3,
+          },
+          {
+            label: 'Left Company (Yes)',
+            data: [15, 13, 7, 13],
+            backgroundColor: '#c9a84c',
+            borderRadius: 3,
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'bottom', labels: { font: { size: 11 }, color: '#5a6380' } }
+        },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: '#5a6380', font: { size: 11 } } },
+          y: { grid: { color: '#e8eaf0' }, ticks: { color: '#5a6380', font: { size: 11 } } }
+        }
+      }
+    });
+
+    // ── CHART 2: Avg Salary by Department ──
+    const ctx2 = document.getElementById('salaryChart').getContext('2d');
+    new Chart(ctx2, {
+      type: 'bar',
+      data: {
+        labels: ['Engineering', 'Sales', 'Marketing', 'HR'],
+        datasets: [{
+          label: 'Average Salary ($)',
+          data: [112082, 102388, 100874, 92670],
+          backgroundColor: ['#c9a84c', '#1a6b8a', '#1d3461', '#112240'],
+          borderRadius: 3,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: '#5a6380', font: { size: 11 } } },
+          y: {
+            grid: { color: '#e8eaf0' },
+            ticks: {
+              color: '#5a6380', font: { size: 11 },
+              callback: val => '$' + (val/1000).toFixed(0) + 'K'
+            }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
